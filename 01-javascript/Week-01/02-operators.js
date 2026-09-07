@@ -80,5 +80,9 @@ console.log("con1 && con2:", con1 && con2); // both contition should be true to 
 console.log("con1 || con2:", con1 || con2); // only one condition should be true to return true
 console.log("!con1:", !con1); // returns the opposite of original result
 
+// ternary operator
 
+let age = 20;
+let canVote = (age >= 18) ? "Yes" : "No";
+console.log("Can vote:", canVote);
 
