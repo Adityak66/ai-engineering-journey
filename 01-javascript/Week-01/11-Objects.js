@@ -61,3 +61,9 @@ const employeesList = [
 
 console.log("Employees List:", employeesList);
 console.log("First Employee Name:", employeesList[1].name);
+
+// Object destructuring
+const { id, name, salary } = employeesList[0];
+console.log("Destructured Employee Details:", id, name, salary);
+
+//
