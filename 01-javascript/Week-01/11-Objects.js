@@ -60,10 +60,70 @@ const employeesList = [
 ];
 
 console.log("Employees List:", employeesList);
-console.log("First Employee Name:", employeesList[1].name);
+console.log("First Employee Name:", employeesList[0].name);
 
 // Object destructuring
 const { id, name, salary } = employeesList[0];
 console.log("Destructured Employee Details:", id, name, salary);
 
-//
+// Object.keys() and Object.values()
+const employee1 = {
+    name: "Aditya",
+    age: 22,
+    role: "Developer"
+}; 
+
+console.log("Employee Keys:", Object.keys(employee1));
+console.log("Employee Values:", Object.values(employee1));
+
+// Object.entries()
+console.log("Employee Entries:", Object.entries(employee1));
+
+
+// Object.freeze() and Object.seal()
+const employee2 = {
+    name: "Aditya",
+    age: 22,
+    role: "Developer"
+};
+
+Object.freeze(employee2); // freeze the object
+employee2.age = 23; 
+console.log("After trying to change age (frozen):", employee2.age); // age will not change
+
+const employee3 = {age: 22, role: "Developer"};
+Object.seal(employee3); // seal the object
+employee3.age = 23;
+console.log("After changing age (sealed):", employee3.age); // age will change
+delete employee3.role;
+console.log("After trying to delete role (sealed):", employee3.role); // role will not be deleted
+
+// Object.assign()
+const target = { a: 1, b: 2 };
+const source = { b: 4, c: 5 };
+const returnedTarget = Object.assign(target, source);
+console.log("Target after Object.assign():", returnedTarget); // { a: 1, b: 4, c: 5 }
+
+// Optional chaining
+const employee = {
+    name: "Aditya"
+};
+
+console.log("Employee City:",employee.address.city); // this will throw an error because address is undefined
+console.log("Employee City:", employee.address?.city); // this will log undefined without throwing an error
+
+// nested optional chaining
+const employee = {
+    name: "Aditya",
+    address: {
+        city: "Mumbai"
+    }
+};
+
+console.log(employee?.address?.city);
+
+// nullish Coalescing ??
+const city = employee?.address?.city ?? "Unknown";
+
+console.log(city);
+
