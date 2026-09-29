@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic DOM Manipulation</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 40px; 
+            background-color: #f9f9f9;
+        }
+        
+        .employee-card { 
+            border: 1px solid #ccc; 
+            background-color: white;
+            padding: 15px; 
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 300px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        #employee-input { 
+            padding: 8px; 
+            width: 200px;
+        }
+        
+        #add-btn { 
+            padding: 8px 15px; 
+            cursor: pointer; 
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h2>🏢 Employee Directory</h2>
+    
+    <div>
+        <input type="text" id="employee-input" placeholder="Enter employee name...">
+        <button id="add-btn">Add Employee</button>
+    </div>
+
+    <br>
+
+    <!-- Container where dynamic employees will be injected -->
+    <div id="employee-list"></div>
+
+    <script src="33-dom-manipulation.js"></script>
+</body>
+</html>
