@@ -1,6 +1,5 @@
-// ==========================================
 // 1. Live Character Counter (input event)
-// ==========================================
+
 const textInput = document.getElementById("text-input");
 const charCount = document.getElementById("char-count");
 
@@ -17,9 +16,8 @@ textInput.addEventListener("input", (event) => {
     }
 });
 
-// ==========================================
 // 2. Button Click Counter (click event)
-// ==========================================
+
 const clickBtn = document.getElementById("click-btn");
 const clickCountDisplay = document.getElementById("click-count");
 let clicks = 0; // State variable
@@ -29,9 +27,8 @@ clickBtn.addEventListener("click", () => {
     clickCountDisplay.textContent = clicks;
 });
 
-// ==========================================
 // 3. Global Keyboard Detector (keydown event)
-// ==========================================
+
 const keyDisplay = document.getElementById("key-display");
 
 // By attaching this to 'document', we listen to the entire webpage
@@ -45,9 +42,8 @@ document.addEventListener("keydown", (event) => {
     }
 });
 
-// ==========================================
 // 4. Form Submission without Refresh (submit event)
-// ==========================================
+
 const myForm = document.getElementById("my-form");
 const nameInput = document.getElementById("name-input");
 const formMessage = document.getElementById("form-message");
@@ -59,7 +55,7 @@ myForm.addEventListener("submit", (event) => {
     // Now we can grab the input data safely
     const submittedName = nameInput.value;
     
-    formMessage.textContent = `✅ Welcome, ${submittedName}! The page did NOT refresh!`;
+    formMessage.textContent = `Welcome, ${submittedName}! The page did NOT refresh!`;
     formMessage.style.color = "green";
     
     // Clear the input field automatically after submitting
