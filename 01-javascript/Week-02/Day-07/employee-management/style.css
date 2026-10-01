@@ -1,0 +1,115 @@
+body { 
+    font-family: Arial, sans-serif; 
+    background-color: #f0f2f5; 
+    margin: 0; 
+    padding: 20px; 
+}
+.container { 
+    max-width: 800px; 
+    margin: auto; 
+    background: white; 
+    padding: 20px 30px; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+}
+header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    border-bottom: 2px solid #eee; 
+    padding-bottom: 15px; 
+    margin-bottom: 20px; 
+}
+h1, h2, h3 { 
+    margin: 0; 
+    color: #333; 
+}
+.api-btn { 
+    background: #6f42c1; 
+    color: white; 
+    border: none; 
+    padding: 10px 15px; 
+    cursor: pointer; 
+    border-radius: 4px; 
+    font-weight: bold;
+}
+.api-btn:hover { background: #5a32a3; }
+
+/* FORM */
+.form-section { margin-bottom: 20px; }
+.form-section form { 
+    display: flex; 
+    gap: 10px; 
+    flex-wrap: wrap; 
+    margin-top: 15px; 
+}
+.form-section input { 
+    flex: 1; 
+    min-width: 150px; 
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+}
+.form-section button { 
+    padding: 10px 15px; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    background: #28a745; 
+    color: white; 
+    font-weight: bold;
+}
+.form-section button:hover { background: #218838; }
+.form-section #cancel-edit-btn { background: #6c757d; }
+
+/* CONTROLS */
+.controls-section { 
+    display: flex; 
+    gap: 10px; 
+    padding: 15px; 
+    background: #f8f9fa; 
+    border-radius: 6px; 
+    flex-wrap: wrap;
+    border: 1px solid #eee;
+}
+.controls-section input, .controls-section select { 
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+    flex: 1; 
+}
+
+/* STATS */
+.stats-section { 
+    margin-top: 20px; 
+    padding: 15px; 
+    background: #e9ecef; 
+    border-radius: 6px; 
+    text-align: center; 
+}
+
+/* LIST */
+.list-section { margin-top: 20px; }
+.employee-item { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 15px; 
+    border-bottom: 1px solid #eee; 
+}
+.employee-item:last-child { border-bottom: none; }
+.employee-info { flex: 1; font-size: 16px; }
+.employee-actions button { 
+    margin-left: 5px; 
+    padding: 6px 12px; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer; 
+}
+.btn-edit { background: #ffc107; color: #212529; }
+.btn-delete { background: #dc3545; color: white; }
+.btn-edit:hover { background: #e0a800; }
+.btn-delete:hover { background: #c82333; }
+
+/* UTILS */
+.hidden { display: none !important; }
