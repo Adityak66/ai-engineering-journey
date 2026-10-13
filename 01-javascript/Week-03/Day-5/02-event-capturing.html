@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Capturing</title>
+</head>
+<body>
+    <div id="parent" style="padding: 30px; background: lightblue;">
+        Parent Div
+        <button id="child">Click Me</button>
+    </div>
+
+    <script>
+        const parent = document.querySelector("#parent");
+        const child = document.querySelector("#child");
+
+        // 1. Capturing Phase listener (3rd argument = true)
+        parent.addEventListener("click", () => {
+            console.log("Parent clicked - Capturing");
+        }, true);
+
+        // 2. Target Phase listener
+        child.addEventListener("click", () => {
+            console.log("Child clicked");
+        });
+
+        // 3. Bubbling Phase listener (default / false)
+        parent.addEventListener("click", () => {
+            console.log("Parent clicked - Bubbling");
+        });
+    </script>
+</body>
+</html>
+

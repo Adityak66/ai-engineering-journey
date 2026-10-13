@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Bubbling, Capturing, Target vs CurrentTarget</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f7f6;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: white;
+            padding: 25px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        #parent, #capture-parent {
+            padding: 30px;
+            background-color: #e3f2fd;
+            border: 2px dashed #2196f3;
+            border-radius: 6px;
+            margin: 15px 0;
+            cursor: pointer;
+        }
+        button {
+            padding: 10px 18px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            cursor: pointer;
+            display: block;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .note-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px 16px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>⚡ Event Bubbling vs Capturing</h2>
+        <div class="note-box">
+            👉 <strong>Open DevTools (F12 or Ctrl+Shift+I) -> Console tab</strong> to observe the order and target properties!
+        </div>
+
+        <!-- 1. Bubbling & Target vs CurrentTarget -->
+        <h3>1. Bubbling Phase (Default)</h3>
+        <div id="parent">
+            <strong>Parent DIV</strong> (Click anywhere inside this blue area or button)
+            <button id="child">Child Button (Click me)</button>
+        </div>
+
+        <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+
+        <!-- 2. Capturing Phase -->
+        <h3>2. Capturing Phase (Third argument = true)</h3>
+        <div id="capture-parent">
+            <strong>Capture Parent DIV</strong>
+            <button id="capture-child">Child Button (Click me)</button>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. EVENT BUBBLING & target vs currentTarget
+        // ==========================================
+        const parent = document.querySelector("#parent");
+        const child = document.querySelector("#child");
+
+        // Parent listener (Bubbling phase)
+        parent.addEventListener("click", (event) => {
+            console.log("\n--- [Bubbling] Parent Clicked ---");
+            console.log("event.target (where click originated):", event.target);
+            console.log("event.currentTarget (whose listener is running):", event.currentTarget);
+        });
+
+        // Child listener (Bubbling phase)
+        child.addEventListener("click", (event) => {
+            console.log("\n--- [Bubbling] Child Clicked ---");
+            console.log("event.target:", event.target);
+            console.log("event.currentTarget:", event.currentTarget);
+        });
+
+        // ==========================================
+        // 2. EVENT CAPTURING (useCapture = true)
+        // ==========================================
+        const captureParent = document.querySelector("#capture-parent");
+        const captureChild = document.querySelector("#capture-child");
+
+        // Parent listener with `true` enables CAPTURE mode
+        // Capture triggers on the way DOWN (Window -> Document -> Parent -> Child)
+        captureParent.addEventListener("click", (event) => {
+            console.log("\n--- [Capture Phase] Capture Parent triggered FIRST! ---");
+            console.log("Current target:", event.currentTarget);
+        }, true);
+
+        // Child listener
+        captureChild.addEventListener("click", (event) => {
+            console.log("--- [Target/Bubble Phase] Capture Child triggered SECOND! ---");
+            console.log("Current target:", event.currentTarget);
+        });
+    </script>
+</body>
+</html>
+
