@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debounced Search Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f6f8;
+        }
+        .container {
+            max-width: 520px;
+            margin: auto;
+            background: white;
+            padding: 25px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        input[type="text"] {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            background: #eef2f6;
+            padding: 10px 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .stat-box strong {
+            display: block;
+            font-size: 20px;
+            color: #007bff;
+            margin-top: 5px;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-badge.typing {
+            background: #fff3cd;
+            color: #856404;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        li {
+            padding: 10px 14px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+        li:last-child {
+            border-bottom: none;
+        }
+        .dept-tag {
+            background: #e2e3e5;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #383d41;
+        }
+        .empty-msg {
+            color: #888;
+            text-align: center;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🔍 Debounced Employee Search</h2>
+        
+        <input type="text" id="searchInput" placeholder="Type fast to search (e.g., 'Aditya', 'Sarah')..." autocomplete="off">
+        
+        <div id="statusBadge" class="status-badge">Idle (Waiting for input)</div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                Keystrokes / Input Events
+                <strong id="keystrokeCount">0</strong>
+            </div>
+            <div class="stat-box">
+                Debounced Searches
+                <strong id="searchExecCount">0</strong>
+            </div>
+        </div>
+
+        <ul id="resultsList"></ul>
+    </div>
+
+    <script>
+        const employees = [
+            { id: 1, name: "Aditya Sharma", department: "Engineering" },
+            { id: 2, name: "Rahul Deshmukh", department: "Design" },
+            { id: 3, name: "Sarah Connor", department: "Operations" },
+            { id: 4, name: "Aditi Rao", department: "Engineering" },
+            { id: 5, name: "Pooja Patel", department: "Human Resources" },
+            { id: 6, name: "Michael Scott", department: "Management" }
+        ];
+
+        const searchInput = document.querySelector("#searchInput");
+        const resultsList = document.querySelector("#resultsList");
+        const keystrokeCountEl = document.querySelector("#keystrokeCount");
+        const searchExecCountEl = document.querySelector("#searchExecCount");
+        const statusBadge = document.querySelector("#statusBadge");
+
+        let keystrokes = 0;
+        let searchesExecuted = 0;
+
+        function debounce(callback, delay) {
+            let timerId;
+
+            return function (...args) {
+                clearTimeout(timerId);
+
+                statusBadge.textContent = "⏳ Typing... timer reset!";
+                statusBadge.className = "status-badge typing";
+
+                timerId = setTimeout(() => {
+                    callback(...args);
+                }, delay);
+            };
+        }
+
+        function performSearch(query) {
+            searchesExecuted++;
+            searchExecCountEl.textContent = searchesExecuted;
+
+            statusBadge.textContent = `✅ Debounce fired for: "${query}"`;
+            statusBadge.className = "status-badge";
+
+            console.log(`[API / Search executed] query: "${query}"`);
+
+            const filtered = employees.filter(emp =>
+                emp.name.toLowerCase().includes(query.toLowerCase()) ||
+                emp.department.toLowerCase().includes(query.toLowerCase())
+            );
+
+            renderResults(filtered);
+        }
+
+        function renderResults(list) {
+            resultsList.innerHTML = "";
+
+            if (list.length === 0) {
+                resultsList.innerHTML = `<li class="empty-msg">No employees found.</li>`;
+                return;
+            }
+
+            list.forEach(emp => {
+                const li = document.createElement("li");
+                li.innerHTML = `
+                    <strong>${emp.name}</strong>
+                    <span class="dept-tag">${emp.department}</span>
+                `;
+                resultsList.append(li);
+            });
+        }
+
+        const debouncedSearch = debounce(performSearch, 400);
+
+        renderResults(employees);
+
+        searchInput.addEventListener("input", (e) => {
+            keystrokes++;
+            keystrokeCountEl.textContent = keystrokes;
+            debouncedSearch(e.target.value.trim());
+        });
+    </script>
+</body>
+</html>
+
