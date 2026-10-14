@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll & Resize Throttle Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, #f0f4f8 0%, #d9e2ec 50%, #bcccdc 100%);
+            min-height: 350vh;
+        }
+        .dashboard {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            max-width: 550px;
+            width: 90%;
+            z-index: 1000;
+        }
+        h2 { margin-top: 0; color: #102a43; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 15px 0;
+        }
+        .stat-card {
+            background: #f0f4f8;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .stat-card.raw { border-left: 4px solid #dc3545; }
+        .stat-card.throttled { border-left: 4px solid #28a745; }
+        .stat-card strong {
+            display: block;
+            font-size: 24px;
+            margin-top: 5px;
+        }
+        .stat-card.raw strong { color: #dc3545; }
+        .stat-card.throttled strong { color: #28a745; }
+        .log-box {
+            background: #243b53;
+            color: #9fb3c8;
+            padding: 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 13px;
+            height: 90px;
+            overflow-y: auto;
+        }
+        .scroll-indicator {
+            text-align: center;
+            padding-top: 250px;
+            color: #627d98;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h2>⚡ Throttle: Scroll & Resize Demo</h2>
+        <p style="margin: 0; font-size: 14px; color: #486581;">
+            Scroll down or resize the browser window quickly to see throttle in action!
+        </p>
+
+        <div class="stats-grid">
+            <div class="stat-card raw">
+                Raw Scroll Events
+                <strong id="rawScrollCount">0</strong>
+            </div>
+            <div class="stat-card throttled">
+                Throttled Runs (500ms)
+                <strong id="throttledScrollCount">0</strong>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card raw">
+                Raw Resize Events
+                <strong id="rawResizeCount">0</strong>
+            </div>
+            <div class="stat-card throttled">
+                Throttled Runs (400ms)
+                <strong id="throttledResizeCount">0</strong>
+            </div>
+        </div>
+
+        <div class="log-box" id="logBox">
+            > Ready. Start scrolling or resizing...
+        </div>
+    </div>
+
+    <div class="scroll-indicator">
+        <h3>👇 Keep scrolling down... 👇</h3>
+        <p style="margin-top: 400px;">Scrolling continuously generates hundreds of events...</p>
+        <p style="margin-top: 400px;">...but throttle limits execution to once every 500ms!</p>
+        <p style="margin-top: 400px;">🚀 Great for scroll position tracking, lazy loading, and animations!</p>
+    </div>
+
+    <script>
+        function throttle(callback, delay) {
+            let lastRun = 0;
+
+            return function (...args) {
+                const now = Date.now();
+
+                if (now - lastRun >= delay) {
+                    lastRun = now;
+                    callback(...args);
+                }
+            };
+        }
+
+        let rawScrolls = 0;
+        let throttledScrolls = 0;
+        let rawResizes = 0;
+        let throttledResizes = 0;
+
+        const rawScrollEl = document.querySelector("#rawScrollCount");
+        const throttledScrollEl = document.querySelector("#throttledScrollCount");
+        const rawResizeEl = document.querySelector("#rawResizeCount");
+        const throttledResizeEl = document.querySelector("#throttledResizeCount");
+        const logBox = document.querySelector("#logBox");
+
+        function addLog(msg) {
+            const time = new Date().toLocaleTimeString();
+            logBox.innerHTML = `> [${time}] ${msg}<br>` + logBox.innerHTML;
+        }
+
+        const onThrottledScroll = throttle(() => {
+            throttledScrolls++;
+            throttledScrollEl.textContent = throttledScrolls;
+            addLog(`Scroll handler ran (Y: ${Math.round(window.scrollY)}px)`);
+        }, 500);
+
+        window.addEventListener("scroll", () => {
+            rawScrolls++;
+            rawScrollEl.textContent = rawScrolls;
+            onThrottledScroll();
+        });
+
+        const onThrottledResize = throttle(() => {
+            throttledResizes++;
+            throttledResizeEl.textContent = throttledResizes;
+            addLog(`Resize handler ran (${window.innerWidth}x${window.innerHeight})`);
+        }, 400);
+
+        window.addEventListener("resize", () => {
+            rawResizes++;
+            rawResizeEl.textContent = rawResizes;
+            onThrottledResize();
+        });
+    </script>
+</body>
+</html>
+
