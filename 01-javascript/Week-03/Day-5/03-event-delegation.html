@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Delegation Basics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f8f9fa;
+        }
+        .card {
+            background: white;
+            max-width: 450px;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
+        }
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+        .info-box {
+            background: #e7f1ff;
+            border-left: 4px solid #0d6efd;
+            padding: 10px 14px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>👥 Employee List (Event Delegation)</h2>
+        <div class="info-box">
+            💡 Notice: There is <strong>only ONE event listener</strong> on the entire <code>&lt;ul&gt;</code>!
+        </div>
+
+        <ul id="employeeList">
+            <li>
+                <span>Aditya</span>
+                <button class="delete-btn">Delete</button>
+            </li>
+            <li>
+                <span>Rahul</span>
+                <button class="delete-btn">Delete</button>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        const employeeList = document.querySelector("#employeeList");
+
+        employeeList.addEventListener("click", (event) => {
+            console.log("Clicked element (event.target):", event.target);
+
+            if (event.target.matches(".delete-btn")) {
+                const li = event.target.closest("li");
+                console.log("Removing row:", li.querySelector("span").textContent);
+                li.remove();
+            }
+        });
+    </script>
+</body>
+</html>
+

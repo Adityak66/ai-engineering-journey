@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Employee List - Event Delegation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f0f2f5;
+        }
+        .container {
+            max-width: 480px;
+            margin: auto;
+            background: white;
+            padding: 25px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .form-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 15px;
+        }
+        button.add-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button.add-btn:hover {
+            background-color: #218838;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            background: #fafafa;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px 14px;
+            font-size: 13px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🧑‍💼 Dynamic Employee List</h2>
+
+        <!-- Input & Add Button -->
+        <div class="form-row">
+            <input type="text" id="employeeInput" placeholder="Enter employee name..." autocomplete="off">
+            <button id="addBtn" class="add-btn">Add</button>
+        </div>
+
+        <!-- The List Container with ONE delegated listener -->
+        <ul id="employeeList">
+            <li>
+                <span class="emp-name">Aditya</span>
+                <button class="delete-btn">Delete</button>
+            </li>
+            <li>
+                <span class="emp-name">Sarah</span>
+                <button class="delete-btn">Delete</button>
+            </li>
+        </ul>
+
+        <div class="note">
+            🚀 <strong>Magic of Event Delegation:</strong> Newly added rows don't need any new event listeners! The click event on their Delete button automatically bubbles up to <code>#employeeList</code>.
+        </div>
+    </div>
+
+    <script>
+        const employeeInput = document.querySelector("#employeeInput");
+        const addBtn = document.querySelector("#addBtn");
+        const employeeList = document.querySelector("#employeeList");
+
+        // 1. ADD EMPLOYEE DYNAMICALLY
+        function addEmployee() {
+            const name = employeeInput.value.trim();
+            if (!name) return;
+
+            const li = document.createElement("li");
+
+            const span = document.createElement("span");
+            span.className = "emp-name";
+            span.textContent = name;
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.className = "delete-btn";
+            deleteBtn.textContent = "Delete";
+
+            li.append(span, deleteBtn);
+            employeeList.append(li);
+
+            employeeInput.value = "";
+            employeeInput.focus();
+        }
+
+        addBtn.addEventListener("click", addEmployee);
+        employeeInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") addEmployee();
+        });
+
+        // 2. SINGLE DELEGATED LISTENER ON PARENT
+        employeeList.addEventListener("click", (event) => {
+            if (event.target.matches(".delete-btn")) {
+                const li = event.target.closest("li");
+                console.log("Deleted via delegation:", li.querySelector(".emp-name").textContent);
+                li.remove();
+            }
+        });
+    </script>
+</body>
+</html>
+
