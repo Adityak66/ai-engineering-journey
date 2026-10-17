@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System | Modern JavaScript</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- HEADER -->
+        <header class="app-header">
+            <div class="header-branding">
+                <h1>🏢 WorkForce Pro</h1>
+                <p class="subtitle">Modern ES6 Employee Management System</p>
+            </div>
+            <div class="header-actions">
+                <button id="loadApiBtn" class="btn btn-secondary" title="Fetch mock employee data from JSONPlaceholder API">
+                    <span class="icon">🌐</span> Load Remote API Data
+                </button>
+                <button id="clearDataBtn" class="btn btn-outline-danger" title="Clear localStorage data">
+                    <span class="icon">🗑️</span> Reset Data
+                </button>
+            </div>
+        </header>
+
+        <!-- STATUS / ALERT NOTIFICATION -->
+        <div id="statusAlert" class="status-alert hidden" role="alert">
+            <span id="alertIcon" class="alert-icon">ℹ️</span>
+            <span id="alertMessage" class="alert-message">Loading...</span>
+        </div>
+
+        <!-- METRICS OVERVIEW CARDS -->
+        <section class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Total Employees</div>
+                <div id="metricTotal" class="metric-value">0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Average Salary</div>
+                <div id="metricAverage" class="metric-value">₹0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Highest Salary</div>
+                <div id="metricHighest" class="metric-value">₹0</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Total Payroll</div>
+                <div id="metricPayroll" class="metric-value">₹0</div>
+            </div>
+        </section>
+
+        <!-- MAIN CONTENT GRID -->
+        <div class="content-grid">
+            <!-- LEFT COLUMN: ADD / EDIT EMPLOYEE FORM -->
+            <aside class="form-card">
+                <div class="card-header">
+                    <h3 id="formTitle">Add New Employee</h3>
+                    <span id="formBadge" class="badge badge-success">Create Mode</span>
+                </div>
+
+                <form id="employeeForm" autocomplete="off">
+                    <input type="hidden" id="employeeId">
+
+                    <div class="form-group">
+                        <label for="empName">Full Name <span class="required">*</span></label>
+                        <input type="text" id="empName" placeholder="e.g. Aditya Sharma" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="empDept">Department <span class="required">*</span></label>
+                        <input type="text" id="empDept" placeholder="e.g. Engineering, HR, Finance" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="empSalary">Monthly Salary (₹) <span class="required">*</span></label>
+                        <input type="number" id="empSalary" min="1000" step="500" placeholder="e.g. 65000" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="empCity">Location / City</label>
+                        <input type="text" id="empCity" placeholder="e.g. Nashik, Pune, Remote">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" id="submitFormBtn" class="btn btn-primary">
+                            <span class="icon">➕</span> Add Employee
+                        </button>
+                        <button type="button" id="cancelEditBtn" class="btn btn-outline hidden">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </aside>
+
+            <!-- RIGHT COLUMN: CONTROLS & EMPLOYEE DIRECTORY -->
+            <main class="directory-card">
+                <!-- CONTROLS TOOLBAR -->
+                <div class="toolbar">
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="searchInput" placeholder="Search by name, department, or city... (debounced)" autocomplete="off">
+                        <span id="searchStatus" class="search-indicator">Ready</span>
+                    </div>
+
+                    <div class="filter-controls">
+                        <div class="select-wrapper">
+                            <label for="deptFilter" class="sr-only">Filter by Department</label>
+                            <select id="deptFilter" aria-label="Filter by department">
+                                <option value="All">All Departments</option>
+                            </select>
+                        </div>
+
+                        <div class="select-wrapper">
+                            <label for="salarySort" class="sr-only">Sort By</label>
+                            <select id="salarySort" aria-label="Sort employees">
+                                <option value="none">Sort: Default</option>
+                                <option value="salary-asc">Salary: Low → High ↑</option>
+                                <option value="salary-desc">Salary: High → Low ↓</option>
+                                <option value="name-asc">Name: A → Z</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EMPLOYEE LIST (Managed via Single Delegated Event Listener) -->
+                <div class="table-container">
+                    <table class="employee-table">
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Department</th>
+                                <th>Location</th>
+                                <th>Salary</th>
+                                <th style="text-align: right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeeList">
+                            <!-- Injected dynamically via JS -->
+                        </tbody>
+                    </table>
+
+                    <div id="emptyState" class="empty-state hidden">
+                        <span class="empty-icon">📭</span>
+                        <h4>No matching employees found</h4>
+                        <p>Try modifying your search or filters, or add a new employee.</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <footer class="app-footer">
+            <p>WorkForce Pro • Week 3 Consolidation Project • ES6 Modules & Modern DOM Architecture</p>
+        </footer>
+    </div>
+
+    <!-- ENTRY POINT MODULE -->
+    <script type="module" src="./src/app.js"></script>
+</body>
+</html>

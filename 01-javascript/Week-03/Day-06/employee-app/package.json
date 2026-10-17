@@ -1,0 +1,12 @@
+{
+  "name": "employee-app",
+  "version": "1.0.0",
+  "description": "Modern JavaScript Employee Management App - Week 3 Day 6 Consolidation",
+  "type": "module",
+  "scripts": {
+    "test:utils": "node src/utils.js"
+  },
+  "keywords": ["javascript", "es-modules", "dom", "events", "debounce"],
+  "author": "Aditya",
+  "license": "ISC"
+}
