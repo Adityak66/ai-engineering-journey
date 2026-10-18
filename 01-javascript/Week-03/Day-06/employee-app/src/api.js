@@ -1,6 +1,6 @@
-// ============================================================================
+
 // src/api.js — Remote API Integration (JSONPlaceholder)
-// ============================================================================
+
 
 const API_URL = "https://jsonplaceholder.typicode.com/users";
 
