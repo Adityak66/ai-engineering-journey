@@ -1,0 +1,11 @@
+{
+  "name": "day-01",
+  "version": "1.0.0",
+  "description": "TypeScript Setup + Basic Types - Week 04 Day 01",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}
