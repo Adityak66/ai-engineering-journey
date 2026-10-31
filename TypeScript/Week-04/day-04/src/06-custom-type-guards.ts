@@ -1,6 +1,4 @@
-// ==========================================
 // 06-custom-type-guards.ts — Custom Type Predicates (value is Type)
-// ==========================================
 
 export {};
 

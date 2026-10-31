@@ -1,6 +1,4 @@
-// ==========================================
 // 09-final-practice.ts — 8 Final Practice Challenges
-// ==========================================
 
 export {};
 
@@ -77,11 +75,11 @@ type Status = "pending" | "approved" | "rejected";
 function getStatusBadge(status: Status): string {
     switch (status) {
         case "approved":
-            return "[STATUS: APPROVED ✅] Proceed with onboarding.";
+            return "[STATUS: APPROVED] Proceed with onboarding.";
         case "rejected":
-            return "[STATUS: REJECTED ❌] Application closed.";
+            return "[STATUS: REJECTED] Application closed.";
         case "pending":
-            return "[STATUS: PENDING ⏳] Awaiting manager sign-off.";
+            return "[STATUS: PENDING] Awaiting manager sign-off.";
     }
 }
 
@@ -167,5 +165,5 @@ if (isEmployee(unvalidatedData)) {
 }
 
 console.log("\n=================================================");
-console.log("🏁 ALL 8 CODING CHALLENGES VERIFIED SUCCESSFULLY!");
+console.log("ALL 8 CODING CHALLENGES VERIFIED SUCCESSFULLY!");
 console.log("=================================================");

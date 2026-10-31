@@ -1,6 +1,4 @@
-// ==========================================
 // 07-null-undefined.ts — Null Safety with strictNullChecks
-// ==========================================
 
 export {};
 
@@ -16,7 +14,7 @@ console.log("Assigned employeeName:", employeeName);
 employeeName = null; // ✅ Allowed because null is in the union
 console.log("Reset employeeName to null:", employeeName);
 
-// ❌ TypeScript error with strictNullChecks enabled:
+// TypeScript error with strictNullChecks enabled:
 // employeeName = undefined; // Error: Type 'undefined' is not assignable to type 'string | null'.
 
 // 2. Variable with undefined

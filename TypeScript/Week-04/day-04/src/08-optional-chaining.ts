@@ -1,6 +1,4 @@
-// ==========================================
 // 08-optional-chaining.ts — Optional Chaining (?.) and Nullish Coalescing (??)
-// ==========================================
 
 export {};
 

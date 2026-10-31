@@ -1,6 +1,4 @@
-// ==========================================
 // 05-in-and-instanceof.ts — Narrowing with 'in', 'instanceof', and Equality
-// ==========================================
 
 export {};
 
@@ -48,12 +46,12 @@ type Status = "pending" | "approved" | "rejected";
 
 function describeStatus(status: Status): string {
     if (status === "approved") {
-        return "Request accepted ✅";
+        return "Request accepted";
     }
     if (status === "rejected") {
-        return "Request declined ❌";
+        return "Request declined";
     }
-    return "Waiting for review ⏳";
+    return "Waiting for review";
 }
 
 console.log("Status 'approved':", describeStatus("approved"));
