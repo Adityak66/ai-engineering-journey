@@ -1,0 +1,15 @@
+{
+  "name": "employee-cli",
+  "version": "1.0.0",
+  "description": "TypeScript Employee Management CLI",
+  "main": "dist/app.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "dev": "npm run build && npm start"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.0"
+  }
+}
