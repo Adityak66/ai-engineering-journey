@@ -64,3 +64,18 @@ export function sortBySalary(
         order === "asc" ? a.salary - b.salary : b.salary - a.salary
     );
 }
+
+// Searches employees by name using a case-insensitive substring match
+export function searchEmployeesByName(
+    employees: Employee[],
+    query: string
+): Employee[] {
+    const term = query.trim().toLowerCase();
+    if (!term) {
+        return employees;
+    }
+    return employees.filter(emp =>
+        emp.name.toLowerCase().includes(term)
+    );
+}
+
