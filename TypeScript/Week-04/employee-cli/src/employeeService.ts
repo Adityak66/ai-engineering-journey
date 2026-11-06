@@ -79,3 +79,21 @@ export function searchEmployeesByName(
     );
 }
 
+// Computes total employee count per department for organizational reporting
+export function getDepartmentHeadcount(
+    employees: Employee[]
+): Record<Department, number> {
+    const summary: Record<Department, number> = {
+        IT: 0,
+        HR: 0,
+        Finance: 0,
+        Sales: 0
+    };
+
+    return employees.reduce((acc, emp) => {
+        acc[emp.department] = (acc[emp.department] ?? 0) + 1;
+        return acc;
+    }, summary);
+}
+
+
