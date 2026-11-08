@@ -1,0 +1,11 @@
+{
+  "name": "week-05-day-01",
+  "version": "1.0.0",
+  "description": "TypeScript Generics Fundamentals - Week 05 Day 01",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}
