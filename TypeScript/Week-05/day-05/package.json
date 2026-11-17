@@ -1,0 +1,11 @@
+{
+  "name": "week-05-day-05",
+  "version": "1.0.0",
+  "description": "TypeScript Interfaces, Modules and Asynchronous Typing - Week 05 Day 05",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}
