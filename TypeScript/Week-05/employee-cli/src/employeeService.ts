@@ -3,35 +3,63 @@
 
 import type { Employee, EmployeeId, CreateEmployee, UpdateEmployee, Department } from "./types";
 
-// Adds a new employee to the roster immutably, rejecting duplicate IDs
+// Generic ID lookup shared across repository operations to avoid duplicate predicates
+export function findById<T extends { id: EmployeeId }>(
+    items: readonly T[],
+    id: EmployeeId
+): T | undefined {
+    return items.find(item => item.id === id);
+}
+
+// Adds a new employee to the roster immutably, rejecting duplicate IDs and invalid inputs
 export function addEmployee(
-    employees: Employee[],
+    employees: readonly Employee[],
     employee: Employee
 ): Employee[] {
-    const exists = employees.some(emp => emp.id === employee.id);
-    if (exists) {
+    if (findById(employees, employee.id) !== undefined) {
         throw new Error("Employee ID already exists");
+    }
+    if (!employee.name.trim()) {
+        throw new Error("Employee name cannot be empty");
+    }
+    if (!Number.isFinite(employee.salary) || employee.salary < 0) {
+        throw new Error("Salary must be a valid non-negative number");
     }
     return [...employees, employee];
 }
 
+// Creates and adds an employee from a CreateEmployee DTO plus explicit ID
+export function createEmployee(
+    employees: readonly Employee[],
+    id: EmployeeId,
+    input: CreateEmployee
+): Employee[] {
+    const newEmployee: Employee = { id, ...input };
+    return addEmployee(employees, newEmployee);
+}
+
 // Finds an employee by ID using strict equality to preserve number vs string distinction
 export function getEmployeeById(
-    employees: Employee[],
+    employees: readonly Employee[],
     id: EmployeeId
 ): Employee | undefined {
-    return employees.find(emp => emp.id === id);
+    return findById(employees, id);
 }
 
 // Immutably updates an employee record by creating a new array and merged object
 export function updateEmployee(
-    employees: Employee[],
+    employees: readonly Employee[],
     id: EmployeeId,
     changes: UpdateEmployee
 ): Employee[] {
-    const exists = employees.some(emp => emp.id === id);
-    if (!exists) {
+    if (findById(employees, id) === undefined) {
         throw new Error("Employee not found");
+    }
+    if (changes.name !== undefined && !changes.name.trim()) {
+        throw new Error("Employee name cannot be empty");
+    }
+    if (changes.salary !== undefined && (!Number.isFinite(changes.salary) || changes.salary < 0)) {
+        throw new Error("Salary must be a valid non-negative number");
     }
     return employees.map(emp =>
         emp.id === id ? { ...emp, ...changes } : emp
@@ -40,11 +68,10 @@ export function updateEmployee(
 
 // Immutably removes an employee by ID
 export function deleteEmployee(
-    employees: Employee[],
+    employees: readonly Employee[],
     id: EmployeeId
 ): Employee[] {
-    const exists = employees.some(emp => emp.id === id);
-    if (!exists) {
+    if (findById(employees, id) === undefined) {
         throw new Error("Employee not found");
     }
     return employees.filter(emp => emp.id !== id);
@@ -52,7 +79,7 @@ export function deleteEmployee(
 
 // Filters employees belonging to a specified department
 export function filterByDepartment(
-    employees: Employee[],
+    employees: readonly Employee[],
     department: Department
 ): Employee[] {
     return employees.filter(emp => emp.department === department);
@@ -60,7 +87,7 @@ export function filterByDepartment(
 
 // Returns a new sorted array ordered by salary ascending or descending
 export function sortBySalary(
-    employees: Employee[],
+    employees: readonly Employee[],
     order: "asc" | "desc" = "asc"
 ): Employee[] {
     return [...employees].sort((a, b) => {

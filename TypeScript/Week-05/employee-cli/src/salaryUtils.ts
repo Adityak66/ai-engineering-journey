@@ -4,7 +4,7 @@
 import type { Employee } from "./types";
 
 // Calculates total payroll across all employees using Array.prototype.reduce
-export function calculateTotalSalary(employees: Employee[]): number {
+export function calculateTotalSalary(employees: readonly Employee[]): number {
     return employees.reduce(
         (total, emp) => total + emp.salary,
         0
@@ -12,7 +12,7 @@ export function calculateTotalSalary(employees: Employee[]): number {
 }
 
 // Calculates average salary, guarding against division by zero on empty lists
-export function calculateAverageSalary(employees: Employee[]): number {
+export function calculateAverageSalary(employees: readonly Employee[]): number {
     if (employees.length === 0) {
         return 0;
     }
@@ -20,7 +20,7 @@ export function calculateAverageSalary(employees: Employee[]): number {
 }
 
 // Finds the employee with the highest salary; returns undefined if list is empty
-export function findHighestPaidEmployee(employees: Employee[]): Employee | undefined {
+export function findHighestPaidEmployee(employees: readonly Employee[]): Employee | undefined {
     if (employees.length === 0) {
         return undefined;
     }
@@ -30,6 +30,6 @@ export function findHighestPaidEmployee(employees: Employee[]): Employee | undef
 }
 
 // Returns only active employees using Array.prototype.filter
-export function getActiveEmployees(employees: Employee[]): Employee[] {
+export function getActiveEmployees(employees: readonly Employee[]): Employee[] {
     return employees.filter(emp => emp.isActive);
 }
