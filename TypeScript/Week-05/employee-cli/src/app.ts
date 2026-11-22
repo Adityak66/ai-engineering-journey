@@ -3,10 +3,10 @@
 
 import { createInterface } from "node:readline/promises";
 import { stdin, stdout } from "node:process";
-import type { Employee, EmployeeId, Department, UpdateEmployee } from "./types";
+import type { Employee, EmployeeId, Department, CreateEmployee, UpdateEmployee } from "./types";
 import { isValidDepartment } from "./types";
 import {
-    addEmployee,
+    createEmployee,
     getEmployeeById,
     updateEmployee,
     deleteEmployee,
@@ -54,16 +54,45 @@ function parseEmployeeId(input: string): EmployeeId {
     if (!trimmed) {
         throw new Error("Employee ID cannot be empty");
     }
-    return !isNaN(Number(trimmed)) ? Number(trimmed) : trimmed;
+    const numericId = Number(trimmed);
+    return Number.isFinite(numericId) ? numericId : trimmed;
 }
 
-// Validates that salary is a non-negative finite number
+// Validates that salary is a non-empty, finite, non-negative number
 function validateSalary(input: string): number {
-    const salary = Number(input.trim());
+    const trimmed = input.trim();
+    if (!trimmed) {
+        throw new Error("Salary cannot be empty");
+    }
+    const salary = Number(trimmed);
     if (!Number.isFinite(salary) || salary < 0) {
         throw new Error("Enter a valid non-negative salary");
     }
     return salary;
+}
+
+// Parses optional y/n confirmation input while rejecting arbitrary invalid strings
+function parseActiveStatus(input: string, defaultValue: boolean): boolean {
+    const normalized = input.trim().toLowerCase();
+    if (!normalized) {
+        return defaultValue;
+    }
+    if (normalized === "y" || normalized === "yes") {
+        return true;
+    }
+    if (normalized === "n" || normalized === "no") {
+        return false;
+    }
+    throw new Error("Invalid status input. Enter 'y' or 'n'");
+}
+
+// Safe unknown error formatter for catch blocks
+function displayError(error: unknown): void {
+    if (error instanceof Error) {
+        console.log("Error:", error.message);
+    } else {
+        console.log("Unexpected error");
+    }
 }
 
 async function main(): Promise<void> {
@@ -90,6 +119,9 @@ async function main(): Promise<void> {
                     case "1": {
                         const rawId = await rl.question("Enter Employee ID: ");
                         const id = parseEmployeeId(rawId);
+                        if (getEmployeeById(employees, id) !== undefined) {
+                            throw new Error("Employee ID already exists");
+                        }
 
                         const name = (await rl.question("Enter Name: ")).trim();
                         if (!name) {
@@ -104,13 +136,12 @@ async function main(): Promise<void> {
                         const rawSalary = await rl.question("Enter Salary: ");
                         const salary = validateSalary(rawSalary);
 
-                        const activeInput = (await rl.question("Is employee active? (y/n, default y): ")).trim().toLowerCase();
-                        const isActive = activeInput !== "n";
+                        const activeInput = await rl.question("Is employee active? (y/n, default y): ");
+                        const isActive = parseActiveStatus(activeInput, true);
 
                         const emailInput = (await rl.question("Enter Email (optional, press Enter to skip): ")).trim();
 
-                        const newEmployee: Employee = {
-                            id,
+                        const newEmployeeData: CreateEmployee = {
                             name,
                             salary,
                             department: deptInput as Department,
@@ -118,7 +149,7 @@ async function main(): Promise<void> {
                             ...(emailInput ? { email: emailInput } : {})
                         };
 
-                        employees = addEmployee(employees, newEmployee);
+                        employees = createEmployee(employees, id, newEmployeeData);
                         console.log("Employee added successfully.");
                         break;
                     }
@@ -146,8 +177,7 @@ async function main(): Promise<void> {
                         const id = parseEmployeeId(rawId);
                         const existing = getEmployeeById(employees, id);
                         if (!existing) {
-                            console.log(`Employee with ID '${String(id)}' not found.`);
-                            break;
+                            throw new Error(`Employee with ID '${String(id)}' not found`);
                         }
 
                         const newName = (await rl.question(`New Name (current: ${existing.name}, press Enter to keep): `)).trim();
@@ -162,16 +192,23 @@ async function main(): Promise<void> {
                             newSalary = validateSalary(newSalaryStr);
                         }
 
-                        const newActiveStr = (await rl.question(`Active? (y/n, current: ${existing.isActive ? "y" : "n"}, press Enter to keep): `)).trim().toLowerCase();
+                        const newActiveInput = await rl.question(`Active? (y/n, current: ${existing.isActive ? "y" : "n"}, press Enter to keep): `);
+                        const newActiveValue = newActiveInput.trim()
+                            ? parseActiveStatus(newActiveInput, existing.isActive)
+                            : undefined;
                         const newEmail = (await rl.question(`New Email (current: ${existing.email ?? "none"}, press Enter to keep): `)).trim();
 
                         const changes: UpdateEmployee = {};
                         if (newName) changes.name = newName;
                         if (newDept) changes.department = newDept as Department;
                         if (newSalary !== undefined) changes.salary = newSalary;
-                        if (newActiveStr === "y") changes.isActive = true;
-                        if (newActiveStr === "n") changes.isActive = false;
+                        if (newActiveValue !== undefined) changes.isActive = newActiveValue;
                         if (newEmail) changes.email = newEmail;
+
+                        if (Object.keys(changes).length === 0) {
+                            console.log("No changes provided.");
+                            break;
+                        }
 
                         employees = updateEmployee(employees, id, changes);
                         console.log("Employee updated successfully.");
@@ -254,11 +291,7 @@ async function main(): Promise<void> {
                     }
                 }
             } catch (error: unknown) {
-                if (error instanceof Error) {
-                    console.log("Error:", error.message);
-                } else {
-                    console.log("Unexpected error");
-                }
+                displayError(error);
             }
         }
     } finally {
